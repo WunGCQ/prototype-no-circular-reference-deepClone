@@ -2,9 +2,9 @@
 a $deepClone extending function for Array.prototype/Object/Object.prototype/Date.prototype, which avoids circular references both directly and indirecty.
 
 
-# warn: please avoid using nested reference when you want to deep clone an object or array or something else
-# i just want to tell you don't do that, your code will be a mess! 
-# only use these functions on your true data, not something too complex ~
+### warn: please avoid using nested reference when you want to deep clone an object or array or something else
+### i just want to tell you don't do that, your code will be a mess! 
+### only use these functions on your true data, not something too complex ~
 
 ## usage
 
@@ -33,7 +33,7 @@ a $deepClone extending function for Array.prototype/Object/Object.prototype/Date
   */
 ```
 
-for browsers chich can not support Object.definePropertype which means if you set the method directly to Object.prototype, the for ... in statement can not aviod read '$deepClone' property which comes from its prototype, instead, we can use `Object.$deepClone`, the first argument is the object you want to clone
+for browsers chich can not support `Object.definePropertype` which means if you set the method directly to `Object.prototype`, the `for ... in` statement can not aviod read `$deepClone` property which comes from its prototype, instead, we can use `Object.$deepClone`, the first argument is the object you want to clone
 
 ```javascript
   var a = {a:1, ref:null}, b = {b:1, a:a, ref:null}, c = {c:1, b: b, a: a, ref: null};
@@ -58,5 +58,5 @@ for browsers chich can not support Object.definePropertype which means if you se
   */
 ```
 
-enjoy your self using truely clean functions~
+enjoy yourself using truely clean functions~
 
