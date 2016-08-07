@@ -12,7 +12,7 @@
         for (var i = 0; i < len; ++i) {
           var t = this[i]
           var type = getType(t)
-          if (type === 'array' || type === 'object' || type === 'window') {
+          if (type === 'Array' || type === 'Object') {
             // 分为两种逻辑
             // |_之前的调用中未标记visited，则标记visited和thisLevelFirstVisited, 对当前进行deep clone
             // |_之前调用中已标记visited, 则不标记thisLevelFirstVisited, 同时检查thisLevelFirstVisited,
@@ -28,10 +28,10 @@
               } else {
                 ret[i] = t
               }
-              console.error('property ' + i + ' points to some object which may make circular references')
+              err(i, visited)
             }
           }
-          else if (type === 'date') {
+          else if (type === 'Date') {
             ret[i] = Object.deepClone(t)
           } else {
             ret[i] = t
@@ -48,7 +48,7 @@
         for (var i = 0; i < len; ++i) {
           var t = this[i]
           var type = getType(t)
-          if (type === 'array' || type === 'window' || type === 'date') {
+          if (type === 'Array' || type === 'window' || type === 'Date') {
             // 分为两种逻辑
             // |_之前的调用中未标记visited，则标记visited和thisLevelFirstVisited, 对当前进行deep clone
             // |_之前调用中已标记visited, 则不标记thisLevelFirstVisited, 同时检查thisLevelFirstVisited,
@@ -64,10 +64,9 @@
               } else {
                 ret[i] = t
               }
-              console.error('property ' + i + ' points to some object which may make circular references.the visited objects will warn under this line, I will stop clone deeply')
-              console.warn(visited)
+              err(i, visited)
             }
-          }else if (type === 'object') {
+          }else if (type === 'Object') {
             // 分为两种逻辑
             // |_之前的调用中未标记visited，则标记visited和thisLevelFirstVisited, 对当前进行deep clone
             // |_之前调用中已标记visited, 则不标记thisLevelFirstVisited, 同时检查thisLevelFirstVisited,
@@ -83,8 +82,7 @@
               } else {
                 ret[i] = t
               }
-              console.error('property ' + i + ' points to some object which may make circular references.the visited objects will warn under this line, I will stop clone deeply')
-              console.warn(visited)
+              err(i, visited)
             }
           } else {
             ret[i] = t
@@ -104,7 +102,7 @@
       var value = this[i]
       var t = this[i]
       var type = getType(t)
-      if (type === 'array' || type === 'object' || type === 'date') {
+      if (type === 'Array' || type === 'Object' || type === 'Date') {
         // 分为两种逻辑
         // |_之前的调用中未标记visited，则标记visited和thisLevelFirstVisited, 对当前进行deep clone
         // |_之前调用中已标记visited, 则不标记thisLevelFirstVisited, 同时检查thisLevelFirstVisited,
@@ -120,8 +118,7 @@
           } else {
             ret[i] = t
           }
-          console.error('property ' + i + ' points to some object which may make circular references.the visited objects will warn under this line, I will stop clone deeply')
-          console.warn(visited)
+          err(i, visited)
         }
       } else {
         ret[i] = t
@@ -137,7 +134,7 @@
     for (var i in obj) {
       var t = obj[i]
       var type = getType(t)
-      if (type === 'array' || type === 'date' || type == 'window') {
+      if (type === 'Array' || type === 'Date') {
         // 分为两种逻辑
         // |_之前的调用中未标记visited，则标记visited和thisLevelFirstVisited, 对当前进行deep clone
         // |_之前调用中已标记visited, 则不标记thisLevelFirstVisited, 同时检查thisLevelFirstVisited,
@@ -153,10 +150,9 @@
           } else {
             ret[i] = t
           }
-          console.error('property ' + i + ' points to some object which may make circular references.the visited objects will warn under this line, I will stop clone deeply')
-          console.warn(visited)
+          err(i, visited)
         }
-      } else if (type === 'object') {
+      } else if (type === 'Object') {
         if (visited.indexOf(t) == -1) {
           visited.push(t)
           thisLevelFirstVisited.push(t)
@@ -167,8 +163,7 @@
           } else {
             ret[i] = t
           }
-          console.error('property ' + i + ' points to some object which may make circular references.the visited objects will warn under this line, I will stop clone deeply')
-          console.warn(visited)
+          err(i, visited)
         }
       } else {
         ret[i] = t
@@ -182,7 +177,12 @@
   }
 
   function getType (obj) {
-    return Object.prototype.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase()
+    return Object.prototype.toString.call(obj).split(' ')[1].slice(0, -1)
+  }
+
+  function err (i, visited) {
+    console.warn('property ' + i + ' points to some Object which may make circular references.the visited Objects will warn under this line, I will stop clone deeply')
+    console.warn(visited)
   }
 
   if (hasObjectDefinePropertyFunction) {
