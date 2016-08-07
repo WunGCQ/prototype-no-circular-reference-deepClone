@@ -1,6 +1,11 @@
 # $deepClone
 a $deepClone extending function for Array.prototype/Object/Object.prototype/Date.prototype, which avoids circular references both directly and indirecty.
 
+
+# warn: please avoid using nested reference when you want to deep clone an object or array or something else
+# i just want to tell you don't do that, your code will be a mess! 
+# only use these functions on your true data, not something too complex ~
+
 ## usage
 
 ```javascript
@@ -9,6 +14,8 @@ a $deepClone extending function for Array.prototype/Object/Object.prototype/Date
   b.ref = b;
   c.ref = c;
   var _c = c.$deepClone();
+  _c.c = 2;
+  console.log(c.c);
   //this will not cause max call~ and the console will show you wich property will cause the circular problem
   /*
   Script snippet #1:123 property ref points to some object which may make circular references.the visited objects will warn under this lineprototypeClone @ Script snippet #1:123prototypeClone @ Script snippet #1:116prototypeClone @ Script snippet #1:116(anonymous function) @ VM3931:5
